@@ -23,9 +23,4 @@ class RegisterView(CreateView):
     template_name = 'relationship_app/register.html'
 
 
-class UserLoginView(login):
-    template_name = 'relationship_app/login.html'
-    success_url = reverse_lazy('book_list')
-
-class UserLogoutView(logout):
-    template_name = 'relationship_app/logout.html'
+    
