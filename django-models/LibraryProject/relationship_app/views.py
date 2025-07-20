@@ -18,7 +18,9 @@ class LibraryDetailView(DetailView):
     context_object_name = 'library'
 
 def register(request):
-    return render(request,'relationship_app/register.html')
+    form = UserCreationForm()
+    context = {'form': form}
+    return render(request,'relationship_app/register.html', context)
 
 
     
