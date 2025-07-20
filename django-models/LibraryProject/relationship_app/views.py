@@ -97,14 +97,14 @@ def is_member(user):
 
 @user_passes_test(is_admin)
 def Admin(request):
-    return render(request, 'relationship/admin_view.html')
+    return render(request, 'relationship_app/admin_view.html')
 
 @user_passes_test(is_librarian)
 def Librarian(request):
-    return render(request, 'relationship/librarian_view.html')
+    return render(request, 'relationship_app/librarian_view.html')
 
 @user_passes_test(is_member)
 def Member(request):
-    return render(request, 'relationship/member_view.html')
+    return render(request, 'relationship_app/member_view.html')
 
     
