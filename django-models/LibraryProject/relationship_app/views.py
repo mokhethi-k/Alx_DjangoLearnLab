@@ -4,7 +4,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import login, logout
 
 # Create your views here.
 def list_books(request):
@@ -23,9 +23,9 @@ class RegisterView(CreateView):
     template_name = 'relationship_app/register.html'
 
 
-class UserLoginView(LoginView):
+class UserLoginView(login):
     template_name = 'relationship_app/login.html'
     success_url = reverse_lazy('book_list')
 
-class UserLogoutView(LogoutView):
+class UserLogoutView(logout):
     template_name = 'relationship_app/logout.html'
