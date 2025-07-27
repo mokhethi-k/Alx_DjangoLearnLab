@@ -7,13 +7,18 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
+from .forms import ExampleForm
 
 # Create your views here.
 @permission_required('bookshelf.can_view', raise_exception=True)
 def list_books(request):
+    form = ExampleForm(request.GET or None)
     books = Book.objects.all()
+    if form.is_valid():
+        search = form.cleaned_data['search']
+        books = books.filter(title__icontains=search)
     context = {'books': books}
-    return render(request, 'bookshelf/list_books.html', context)
+    return render(request, 'bookshelf/book_list.html', context)
 
 
 @permission_required('bookshelf.can_create', raise_exception=True)
