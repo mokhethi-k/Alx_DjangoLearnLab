@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
 # Create your views here.
@@ -9,12 +9,12 @@ from .serializers import BookSerializer
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes= [AllowAny]
+    permission_classes= [IsAuthenticatedOrReadOnly]
     
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
@@ -36,7 +36,7 @@ class BookUpdateView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
         return Response({
-            "message": "Book created successfully",
+            "message": "Book successfully updated",
             "data": response.data
         }, status=status.HTTP_200_OK)
     
