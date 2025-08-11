@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>Are you sure you want to delete your post?</p>
+        <input type="submit" value="Delete">
+    </form>
+{% endblock %}
