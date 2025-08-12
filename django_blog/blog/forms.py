@@ -11,11 +11,14 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+class TagWidget(forms.CheckboxSelectMultiple):
+    pass
+
 class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         required=False,
-        widget=forms.CheckboxSelectMultiple
+        widget=TagWidget
     )
     class Meta:
         model = Post
