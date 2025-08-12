@@ -1,0 +1,11 @@
+{% extends 'blog/base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <h2>Posts tagged with "{{ tag_name }}"</h2>
+    {% for post in posts %}
+        <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+    {% empty %}
+        <p>No posts with this tag.</p>
+    {% endfor %}
+
+{% endblock %}
