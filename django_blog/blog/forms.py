@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         required=False,
-        widget=TagWidget
+        widget=TagWidget()
     )
     class Meta:
         model = Post
