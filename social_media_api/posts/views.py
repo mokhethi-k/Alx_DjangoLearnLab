@@ -1,4 +1,6 @@
 from rest_framework import viewsets, permissions, filters
+from rest_framework import generics
+from rest_framework.response import Response
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 
@@ -6,7 +8,7 @@ from .serializers import PostSerializer, CommentSerializer
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """Only allow authors to edit or delete their own content."""
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+        if request.method in permissions.SAFE_METHODS:
             return True
         return obj.author == request.user
 
@@ -24,9 +26,22 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all().order_by("-created_at")
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
+    def get_queryset(self):
+        """Filter comments by the parent post id from the URL"""
+        return Comment.objects.filter(post_id=self.kwargs["post_pk"]).order_by("-created_at")
+
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user, post_id=self.kwargs["post_pk"])
+
+
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # get posts from followed users
+        user = self.request.user
+        return Post.objects.filter(author__in=user.following.all()).order_by("-created_at")
